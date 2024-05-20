@@ -6,7 +6,7 @@ import { addBackground } from './game_module/addBackground';
 import { addFishes, animateFishes, addFish, controlFish } from './game_module/addFishes';
 import { addWaterOverlay, animateWaterOverlay } from './game_module/addWaterOverlay';
 import { addDisplacementEffect } from './game_module/addDisplacementEffect';
-
+import { addFuits, updateFuits } from './game_module/addFruit';
 
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
 
   // Store an array of fish sprites for animation.
   const fishes = [];
+  const fruits = [];
 
   async function setup()
   {
@@ -41,6 +42,10 @@ function App() {
           { alias: 'fish5', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish5.png' },
           { alias: 'overlay', src: 'https://pixijs.com/assets/tutorials/fish-pond/wave_overlay.png' },
           { alias: 'displacement', src: 'https://pixijs.com/assets/tutorials/fish-pond/displacement_map.png' },
+
+          { alias: 'fruit1', src: '/assets/fruit01.png' },
+          { alias: 'fruit2', src: '/assets/fruit02.png' },
+          { alias: 'fruit3', src: '/assets/fruit03.png' },
       ];
 
       // Load the assets defined above.
@@ -50,6 +55,8 @@ function App() {
   // Asynchronous IIFE
   (async () =>
   {
+      var direct = 1;
+
       await setup();
       await preload();
       addBackground(app);
@@ -57,17 +64,20 @@ function App() {
       addFish(app, fishes); 
       addWaterOverlay(app);
       addDisplacementEffect(app);
+      addFuits(app, fruits);
+      
 
       // Add the animation callbacks to the application's ticker.
       app.ticker.add((time) =>
       {
           //animateFishes(app, fishes, time);
-          controlFish(app, fishes[0], time);
+          controlFish(app, fishes[0], time, direct);
+          updateFuits(app, fruits, fishes[0], time);
           animateWaterOverlay(app, time);
       });
-
       document.onmousemove = (event)=>{
-        // console.log({pageX:event.pageX, pageY:event.pageY});
+        direct = Math.atan2((event.pageX - fishes[0].x), (event.pageY - fishes[0].y));
+        
       }
   })();
   return (
