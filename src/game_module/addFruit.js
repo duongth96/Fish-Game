@@ -25,7 +25,7 @@ export function addFuits(app, fruits){
         // fish.scale.set(0.5 + Math.random() * 0.2);
 
         fruitContainer.addChild(fruit);
-
+        
         fruits.push(fruit);
     }
 }

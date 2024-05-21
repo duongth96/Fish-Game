@@ -1,8 +1,8 @@
 import { Container, Sprite } from 'pixi.js';
-
+import { getDist } from '../app_math';
 
 /// multi
-export function addFishes(app, fishes)
+export function addFishes(app, fishes, fishCount = 2)
 {
     // Create a container to hold all the fish sprites.
     const fishContainer = new Container();
@@ -10,7 +10,6 @@ export function addFishes(app, fishes)
     // Add the fish container to the stage.
     app.stage.addChild(fishContainer);
 
-    const fishCount = 20;
     const fishAssets = ['fish1', 'fish2', 'fish3', 'fish4', 'fish5'];
 
     // Create a fish sprite for each fish.
@@ -43,6 +42,8 @@ export function addFishes(app, fishes)
         // Add the fish sprite to the fish array.
         fishes.push(fish);
     }
+
+    return fishContainer;
 }
 export function animateFishes(app, fishes, time)
 {
@@ -56,7 +57,7 @@ export function animateFishes(app, fishes, time)
 
     // Iterate through each fish sprite.
     fishes.forEach((fish) =>
-    {
+    {   
         // Animate the fish movement direction according to the turn speed.
         fish.direction += fish.turnSpeed * 0.01;
 
@@ -87,8 +88,6 @@ export function animateFishes(app, fishes, time)
     });
 }
 
-
-
 /// one
 export function addFish(app, fishes)
 {
@@ -110,6 +109,7 @@ export function addFish(app, fishes)
     fish.direction = Math.random() * Math.PI * 2;
     fish.speed = 2 + Math.random() * 2;
     fish.turnSpeed = Math.random() - 0.8;
+    fish.bulls = [];
 
     // Randomly position the fish sprite around the stage.
     // fish.x = Math.random() * app.screen.width;
@@ -164,3 +164,18 @@ export function controlFish(app, fish, time, num)
     }
 }
 
+export function impactFishes(app, fishes, time){
+    const desFish = [];
+    for(let f1 of fishes){
+        for(let f2 of fishes){
+            if(f1 == f2) continue;
+            var goal = getDist({x:f1.x, y:f1.y, mx:f2.x, my:f2.y});
+            if(goal<30){
+                f1.x=f1.y=-100;
+                f2.x=f2.y=-100;
+                fishes.splice(fishes.indexOf(f1), 1);
+                fishes.splice(fishes.indexOf(f2), 1);
+            }
+        }
+    }
+}
