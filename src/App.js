@@ -3,11 +3,12 @@ import './App.css';
 import React, { useState } from 'react';
 import { Application, Assets } from 'pixi.js';
 import { addBackground } from './game_module/addBackground';
-import { addFishes, animateFishes, addFish, controlFish, impactFishes } from './game_module/addFishes';
+import { addFishes, animateFishes, addFish, controlFish, collideFishes } from './game_module/addFishes';
 import { addWaterOverlay, animateWaterOverlay } from './game_module/addWaterOverlay';
 import { addDisplacementEffect } from './game_module/addDisplacementEffect';
 import { addFuits, updateFuits } from './game_module/addFruit';
 import { initWeapon, shoot, updateShoot, shootGoal } from './game_module/addWeapon';
+import { initNotify, updateScope, pushGameover } from './game_module/appNotify';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   const bulls = [];
   var weaponContainer=null;
   var fishesContainer=null;
+  var notifyContainer=null;
 
   async function setup()
   {
@@ -67,17 +69,24 @@ function App() {
       await setup();
       await preload();
       addBackground(app);
-      addFish(app, fishes); 
-      fishesContainer = addFishes(app, fishes, 10);
-      addWaterOverlay(app);
-      addDisplacementEffect(app);
+
+      // object
       weaponContainer = initWeapon(app);
+      addFish(app, fishes); 
+      fishesContainer = addFishes(app, fishes, 0);
+
+      // FX
+      addWaterOverlay(app);
+      //addDisplacementEffect(app);
+
+      // notify
+      notifyContainer = initNotify(app);
       
       // Add the animation callbacks to the application's ticker.
       app.ticker.add((time) =>
       {
-          impactFishes(app, fishes, time);
-          animateFishes(app, fishes.slice(1,fishes.length), time);
+          collideFishes(app, fishes, time);
+          animateFishes(app, fishes.filter(e=>!e.me), time);
           controlFish(app, fishes[0], time, direct);
           animateWaterOverlay(app, time);
           updateShoot(app, bulls);
@@ -85,6 +94,7 @@ function App() {
       });
       document.onmousemove = (event)=>{
         direct = Math.atan2((event.pageX - fishes[0].x), (event.pageY - fishes[0].y));
+        console.log( fishes[0].getLocalBounds());
       }
       document.onkeydown=(event)=>{
         if(event.code=="Space"){
@@ -96,6 +106,9 @@ function App() {
           shoot(app, fishes[0], weaponContainer, bulls);
         }
       }
+	
+      
+      
   })();
   return (
     <div className="App">

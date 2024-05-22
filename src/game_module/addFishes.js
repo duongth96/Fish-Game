@@ -1,5 +1,7 @@
-import { Container, Sprite } from 'pixi.js';
-import { getDist } from '../app_math';
+import { Container, Sprite, Rectangle } from 'pixi.js';
+import { getDist, collide2Sprites } from '../app_math';
+
+const fishAssets = ['fish1', 'fish2', 'fish3', 'fish4', 'fish5'];
 
 /// multi
 export function addFishes(app, fishes, fishCount = 2)
@@ -10,7 +12,7 @@ export function addFishes(app, fishes, fishCount = 2)
     // Add the fish container to the stage.
     app.stage.addChild(fishContainer);
 
-    const fishAssets = ['fish1', 'fish2', 'fish3', 'fish4', 'fish5'];
+    
 
     // Create a fish sprite for each fish.
     for (let i = 0; i < fishCount; i++)
@@ -97,7 +99,8 @@ export function addFish(app, fishes)
     // Add the fish container to the stage.
     app.stage.addChild(fishContainer);
 
-    const fishAsset = 'fish1';
+    var pos = Math.round(Math.random()*(fishAssets.length-1));
+    const fishAsset = fishAssets[pos];
 
     // Create a fish sprite.
     const fish = Sprite.from(fishAsset);
@@ -109,7 +112,7 @@ export function addFish(app, fishes)
     fish.direction = Math.random() * Math.PI * 2;
     fish.speed = 2 + Math.random() * 2;
     fish.turnSpeed = Math.random() - 0.8;
-    fish.bulls = [];
+    fish.me = true;
 
     // Randomly position the fish sprite around the stage.
     // fish.x = Math.random() * app.screen.width;
@@ -130,6 +133,8 @@ export function addFish(app, fishes)
 }
 export function controlFish(app, fish, time, num)
 {
+    if(!fish.me) return;
+
     // Extract the delta time from the Ticker object.
     const delta = time.deltaTime;
 
@@ -140,9 +145,9 @@ export function controlFish(app, fish, time, num)
 
     // control
     fish.direction = num;
-
-    fish.x += Math.sin(fish.direction) * fish.speed;
-    fish.y += Math.cos(fish.direction) * fish.speed;
+    
+    // fish.x += Math.sin(fish.direction) * fish.speed;
+    // fish.y += Math.cos(fish.direction) * fish.speed;
     fish.rotation = -fish.direction - Math.PI / 2;
 
     // Wrap the fish position when it goes out of bounds.
@@ -164,18 +169,42 @@ export function controlFish(app, fish, time, num)
     }
 }
 
-export function impactFishes(app, fishes, time){
+export function collideFishes(app, fishes, time){
     const desFish = [];
     for(let f1 of fishes){
         for(let f2 of fishes){
-            if(f1 == f2) continue;
+            if(f1 === f2) continue;
             var goal = getDist({x:f1.x, y:f1.y, mx:f2.x, my:f2.y});
             if(goal<30){
                 f1.x=f1.y=-100;
                 f2.x=f2.y=-100;
+
+                console.log(f1.getLocalBounds());
+                console.log(f2.getLocalBounds());
+
                 fishes.splice(fishes.indexOf(f1), 1);
                 fishes.splice(fishes.indexOf(f2), 1);
+                
             }
+
+            // var b1 = f1.getLocalBounds();
+            // var b2 = f2.getLocalBounds();
+            // if(b1.rectangle.contains(b2.x, b2.y)){
+            //     //console.log("overlap", b1, b2);
+            //     f1.x=f1.y=-100;
+            //     f2.x=f2.y=-100;
+            //     fishes.splice(fishes.indexOf(f1), 1);
+            //     fishes.splice(fishes.indexOf(f2), 1);
+            // }
+            
+
+            // if(f1.containsPoint(f2)){
+            //     f1.x=f1.y=-100;
+            //     f2.x=f2.y=-100;
+            //     fishes.splice(fishes.indexOf(f1), 1);
+            //     fishes.splice(fishes.indexOf(f2), 1);
+            // }
+
         }
     }
 }
