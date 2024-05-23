@@ -26,7 +26,7 @@ function App() {
   async function setup()
   {
     // Intialize the application.
-    await app.init({ background: '#1099bb', resizeTo: window });
+    await app.init({ background: '#1099bb', resizeTo: window, width:(window.innerWidth-100) });
 
     if(document.querySelector('.App canvas')==null){
       // Then adding the application's canvas to the DOM body.
@@ -39,14 +39,14 @@ function App() {
   {
       // Create an array of asset data to load.
       const assets = [
-          { alias: 'background', src: 'https://pixijs.com/assets/tutorials/fish-pond/pond_background.jpg' },
-          { alias: 'fish1', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish1.png' },
-          { alias: 'fish2', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish2.png' },
-          { alias: 'fish3', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish3.png' },
-          { alias: 'fish4', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish4.png' },
-          { alias: 'fish5', src: 'https://pixijs.com/assets/tutorials/fish-pond/fish5.png' },
-          { alias: 'overlay', src: 'https://pixijs.com/assets/tutorials/fish-pond/wave_overlay.png' },
-          { alias: 'displacement', src: 'https://pixijs.com/assets/tutorials/fish-pond/displacement_map.png' },
+          { alias: 'background', src: '/assets/pond_background.jpg' },
+          { alias: 'fish1', src: '/assets/fish1.png' },
+          { alias: 'fish2', src: '/assets/fish2.png' },
+          { alias: 'fish3', src: '/assets/fish3.png' },
+          { alias: 'fish4', src: '/assets/fish4.png' },
+          { alias: 'fish5', src: '/assets/fish5.png' },
+          { alias: 'overlay', src: '/assets/wave_overlay.png' },
+          { alias: 'displacement', src: '/assets/displacement_map.png' },
 
           { alias: 'fruit1', src: '/assets/fruit01.png' },
           { alias: 'fruit2', src: '/assets/fruit02.png' },
@@ -55,6 +55,10 @@ function App() {
           { alias: 'bull1', src: '/assets/bull01.png' },
           { alias: 'bull2', src: '/assets/bull02.png' },
           { alias: 'bull3', src: '/assets/bull03.png' },
+
+          { alias: 'gh1', src: '/assets/gh01.png' },
+          { alias: 'gh2', src: '/assets/gh02.png' },
+
       ];
 
       // Load the assets defined above.
@@ -73,7 +77,7 @@ function App() {
       // object
       weaponContainer = initWeapon(app);
       addFish(app, fishes); 
-      fishesContainer = addFishes(app, fishes, 0);
+      fishesContainer = addFishes(app, fishes, 20);
 
       // FX
       addWaterOverlay(app);
@@ -92,20 +96,22 @@ function App() {
           updateShoot(app, bulls);
           shootGoal(app, fishes, bulls);
       });
+
+      // control
       document.onmousemove = (event)=>{
         direct = Math.atan2((event.pageX - fishes[0].x), (event.pageY - fishes[0].y));
         console.log( fishes[0].getLocalBounds());
-      }
+      };
       document.onkeydown=(event)=>{
         if(event.code=="Space"){
           shoot(app, fishes[0], weaponContainer, bulls);
         }
-      }
+      };
       document.onmousedown = (event)=>{
         if(event.button == 0){
           shoot(app, fishes[0], weaponContainer, bulls);
         }
-      }
+      };
 	
       
       

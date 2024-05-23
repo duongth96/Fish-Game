@@ -42,7 +42,7 @@ export function updateShoot(app, bulls){
 export function shootGoal(app, fishes, bulls){
     for(let fish of fishes){
         for(let bull of bulls){
-            if(bull.fish == fish) continue;
+            if(bull.fish === fish) continue;
             var goal = getDist({x:fish.x, y:fish.y, mx:bull.x, my:bull.y});
             if(goal<20){
                 console.log("goal", fish);
@@ -51,7 +51,6 @@ export function shootGoal(app, fishes, bulls){
 
                 fish.destroy();
                 fishes.splice(fishes.indexOf(fish), 1);
-
             }
         }
     }
