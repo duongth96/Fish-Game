@@ -37,7 +37,9 @@ export function addFishes(app, fishes, fishCount = 2)
         fish.y = Math.random() * app.screen.height;
 
         // Randomly scale the fish sprite to create some variety.
-        fish.scale.set(0.5 + Math.random() * 0.2);
+        // fish.scale.set(0.5 + Math.random() * 0.2);
+        fish.width = 90;
+        fish.height = 45;
 
         // Add the fish sprite to the fish container.
         fishContainer.addChild(fish);
@@ -107,7 +109,7 @@ export function addFish(app, fishes)
     const fish = Sprite.from(fishAsset);
 
     // Center the sprite anchor.
-    fish.anchor.set(0.5);
+    fish.anchor.set(.5);
 
     // Assign additional properties for the animation.
     fish.direction = Math.random() * Math.PI * 2;
@@ -122,9 +124,10 @@ export function addFish(app, fishes)
     fish.x = app.screen.width/2;
     fish.y = app.screen.height/2;
 
-
     // Randomly scale the fish sprite to create some variety.
-    fish.scale.set(0.5 + Math.random() * 0.2);
+    //fish.scale.set(0.5 + Math.random() * 0.2);
+    fish.width = 90;
+    fish.height = 45;
 
     // Add the fish sprite to the fish container.
     fishContainer.addChild(fish);
@@ -143,13 +146,16 @@ export function controlFish(app, fish, time, num)
     const boundWidth = app.screen.width + stagePadding * 2;
     const boundHeight = app.screen.height + stagePadding * 2;
 
+    //fish.anchor.set(1,.5);
+
     // control
-    fish.direction = num;
+    fish.direction=num;
     
     fish.x += Math.sin(fish.direction) * fish.speed;
     fish.y += Math.cos(fish.direction) * fish.speed;
-    fish.rotation = -fish.direction - Math.PI / 2;
 
+    fish.rotation = -fish.direction - Math.PI / 2;
+    
     // Wrap the fish position when it goes out of bounds.
     if (fish.x < -stagePadding)
     {
@@ -174,18 +180,14 @@ export function collideFishes(app, fishes, time){
     for(let f1 of fishes){
         for(let f2 of fishes){
             if(f1 === f2) continue;
-            var goal = getDist({x:f1.x, y:f1.y, mx:f2.x, my:f2.y});
-            if(goal<30){
-                f1.x=f1.y=-100;
-                f2.x=f2.y=-100;
+            // var goal = getDist({x:f1.x, y:f1.y, mx:f2.x, my:f2.y});
+            // if(goal<30){
+            //     f1.x=f1.y=-100;
+            //     f2.x=f2.y=-100;
 
-                console.log(f1.getLocalBounds());
-                console.log(f2.getLocalBounds());
-
-                fishes.splice(fishes.indexOf(f1), 1);
-                fishes.splice(fishes.indexOf(f2), 1);
-                
-            }
+            //     fishes.splice(fishes.indexOf(f1), 1);
+            //     fishes.splice(fishes.indexOf(f2), 1);
+            // }
 
             // var b1 = f1.getLocalBounds();
             // var b2 = f2.getLocalBounds();
@@ -196,7 +198,6 @@ export function collideFishes(app, fishes, time){
             //     fishes.splice(fishes.indexOf(f1), 1);
             //     fishes.splice(fishes.indexOf(f2), 1);
             // }
-            
 
             // if(f1.containsPoint(f2)){
             //     f1.x=f1.y=-100;
@@ -205,6 +206,13 @@ export function collideFishes(app, fishes, time){
             //     fishes.splice(fishes.indexOf(f2), 1);
             // }
 
+            if(collide2Sprites(f1, f2)){
+                f1.x=f1.y=-100;
+                f2.x=f2.y=-100;
+
+                fishes.splice(fishes.indexOf(f1), 1);
+                fishes.splice(fishes.indexOf(f2), 1);
+            }
         }
     }
 }

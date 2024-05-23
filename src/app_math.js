@@ -5,8 +5,8 @@ export function getDist(bull){
 }
 export function collide2Sprites(el, el2) 
 {
-    var b1 = el.getLocalBounds();
-    var b2 = el2.getLocalBounds();
+    var b1 = el.getBounds();
+    var b2 = el2.getBounds();
 
 
     return (

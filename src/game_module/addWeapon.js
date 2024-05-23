@@ -1,5 +1,10 @@
-import { Container, Sprite } from 'pixi.js';
+import { 
+    Container, 
+    Sprite ,
+    Graphics
+} from 'pixi.js';
 const assets = ['bull1','bull2','bull3'];
+const assets2 = ['red','yellow','green'];
 export function initWeapon(app){
     const weaponContainer = new Container();
     app.stage.addChild(weaponContainer);
@@ -8,11 +13,24 @@ export function initWeapon(app){
 export function shoot(app, fish, weaponContainer, bulls){
 
     if(fish.lastShoot == null || fish.lastShoot == undefined || (Date.parse(Date())-fish.lastShoot)>3000){
-        var pos = Math.round(Math.random()*(assets.length-1));
-        var newBull = Sprite.from(assets[pos]);
+        var pos = Math.round(Math.random()*(assets2.length-1));
+        // var newBull = Sprite.from(assets[pos]);
 
-        fish.lastShoot =  Date.parse(Date());
-        //
+        // fish.lastShoot =  Date.parse(Date());
+
+        // newBull.direction = fish.direction;
+        // newBull.speed = fish.speed + 4;
+
+        // newBull.x = fish.x;
+        // newBull.y = fish.y;
+        // newBull.mx = fish.x;
+        // newBull.my = fish.y;
+        // newBull.fish = fish;
+
+        let newBull = new Graphics()
+            .circle(0, 0, 10)
+            .fill(assets2[pos]);
+
         newBull.direction = fish.direction;
         newBull.speed = fish.speed + 4;
 
@@ -21,7 +39,7 @@ export function shoot(app, fish, weaponContainer, bulls){
         newBull.mx = fish.x;
         newBull.my = fish.y;
         newBull.fish = fish;
-
+        fish.lastShoot =  Date.parse(Date());
         weaponContainer.addChild(newBull);
         bulls.push(newBull);
     }

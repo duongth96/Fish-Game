@@ -3,7 +3,8 @@ import {
     Sprite, 
     Text,
     Ellipse,
-    Rectangle
+    Rectangle,
+    Graphics
 } from 'pixi.js';
 
 export function initNotify(app){
@@ -18,10 +19,10 @@ export function initNotify(app){
           fill : 0xffffff
         }
     });
-    const rect = new Rectangle(500, 200, 20, 10);
+    
 
     container.addChild(text);
-    //container.addChild(rect);
+    
     return container;
 }
 

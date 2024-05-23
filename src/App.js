@@ -77,7 +77,7 @@ function App() {
       // object
       weaponContainer = initWeapon(app);
       addFish(app, fishes); 
-      fishesContainer = addFishes(app, fishes, 20);
+      fishesContainer = addFishes(app, fishes, 10);
 
       // FX
       addWaterOverlay(app);
@@ -100,7 +100,7 @@ function App() {
       // control
       document.onmousemove = (event)=>{
         direct = Math.atan2((event.pageX - fishes[0].x), (event.pageY - fishes[0].y));
-        console.log( fishes[0].getLocalBounds());
+        
       };
       document.onkeydown=(event)=>{
         if(event.code=="Space"){
@@ -113,7 +113,7 @@ function App() {
         }
       };
 	
-      
+      console.log( fishes[0].getBounds());
       
   })();
   return (
